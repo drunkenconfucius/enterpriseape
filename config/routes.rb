@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, :skip => [:sessions]
   get 'welcome/index'
   get 'welcome/about'
   get 'welcome/contact'
@@ -7,15 +7,13 @@ Rails.application.routes.draw do
   get 'welcome/pricing'
   get 'welcome/features'
   
-  devise_scope  :user do
-    get "/login" => "devise/sessions#new"
-  end
-  
-  devise_scope  :user do 
-    delete "/logout" => "devise/sessions#destroy"
-  end
-  
   resources :invoices
+  
+  as :user do
+      get 'signin' => 'devise/sessions#new', :as => :new_user_session
+      post 'signin' => 'devise/sessions#create', :as => :user_session
+      delete 'signout' => 'devise/sessions#destroy', :as => :destroy_user_session
+  end
   
   root to: 'welcome#index'
   
