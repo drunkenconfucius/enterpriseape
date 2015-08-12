@@ -7,6 +7,14 @@ Rails.application.routes.draw do
   get 'welcome/pricing'
   get 'welcome/features'
   
+  devise_scope  :user do
+    get "/login" => "devise/sessions#new"
+  end
+  
+  devise_scope  :user do 
+    delete "/logout" => "devise/sessions#destroy"
+  end
+  
   resources :invoices
   
   root to: 'welcome#index'
